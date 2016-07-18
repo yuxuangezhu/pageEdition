@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+<title>活动管理平台</title>
+<meta name="description" content="">
+<meta name="keywords" content="">
+<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="" />
+<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<!-- <script type="text/javascript" src="http://static.qiyi.com/js/html5/js/lib/lib.1.0.1.min.js?sea1.2.min.js"></script> -->
+<style type="text/css">
+@media (min-width: 1400px) {
+    .container {
+        width: 100%;
+    }
+}
+.dn {
+    display: none;
+}
+.container {
+    
+}
+.active_btn .active {
+    color: #fff;
+    background-color: #449d44;
+    border-color: #398439;
+}
+.page_left {
+    width: 20%;
+    float: left;
+    text-align: center;
+}
+.page_left .list-group {
+    width: 95%;
+}
+.page_right {
+    width: 80%;
+    float: left;
+}
+.page_edit {
+    width: 60%;
+    border: 1px solid #ddd;
+    height: 1000px;
+    float: left;
+    border-radius: 5px;
+}
+.page_pre {
+    width: 39%;
+    border: 1px solid #ddd;
+    float: right;
+    height: 1000px;
+    border-radius: 5px;
+}
+.active_btn {
+    width: 100%;
+    margin-bottom: 10px;
+}
+.list-group-item {
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div class="hd_body">
+    <nav class="navbar navbar-inverse">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <a class="navbar-brand" href="">MPAMS</a>
+            </div>
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9">
+                <ul class="nav navbar-nav">
+                    <li class="active"><a href="">活动管理平台</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+    <div class="container">
+        <div class="page_left">
+            <ul class="list-group">
+                <li class="list-group-item active" module-id="nav" draggable="true">导航</li>
+                <li class="list-group-item" module-id="button" draggable="true">标题</li>
+                <li class="list-group-item" module-id="tab" draggable="true">Morbi leo risus</li>
+                <li class="list-group-item">Porta ac consectetur ac</li>
+                <li class="list-group-item">Vestibulum at eros</li>
+            </ul>
+        </div>
+        <div class="page_right">
+            <div class="btn-group active_btn">
+                <button type="button" class="btn btn-default btn-success view_btn">视图</button>
+                <button type="button" class="btn btn-default code_btn">代码</button>
+                <button type="button" class="btn btn-default pre_btn">预览</button>
+            </div>
+            <div class="page_edit" contentEditable="true"></div>
+            <div class="page_pre dn" preview="view"></div>
+        </div>
+    </div>
+</div>
+<script type="text/javascript">
+/*********************
+ *顶级组件添加module-top="true"属性，该属性不允许该组件添加到任何module-box中
+ *组件可添加子组件的元素添加module-box="true"增加module容器
+ *
+ **********************/
+$(document).ready(function() {
+    var module = {
+            nav: '<nav class="navbar navbar-inverse module" module-top="true"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" href="">MPAMS</a></div><div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9" module-box="true"></div></div></nav>',
+            button: '<ul class="nav navbar-nav module"><li class="active"><a href="">活动管理平台</a></li></ul>',
+            tab: '<div class="btn-group module" module-top="true"><button type="button" class="btn btn-default">Left</button><button type="button" class="btn btn-default">Middle</button><button type="button" class="btn btn-default">Right</button></div>'
+        },
+        moduleType = '';
+    // 拖拽开始
+    $(".list-group-item").on('dragstart', function(e) {
+        moduleType = $(this).attr('module-id');
+        console.log(moduleType)
+    });
+    // 拖拽中
+    $(".page_edit, .module").on('dragover', function(e) {
+        // console.log('o',this)
+        e.preventDefault();
+    });
+    // 拖拽结束
+    $(".page_edit, .module").on('drop', function(e) {
+        console.log('w', this)
+        var box = $(this).find('[module-box="true"]');
+        console.log(box.length, module[moduleType])
+            // debugger
+        if (/module-top="true"/.test(module[moduleType]) || box.length == 0) {
+            $(this).append(module[moduleType])
+        } else if (box.length == 1) {
+            $(box[0]).append(module[moduleType])
+        } else if (box.length > 1) {
+
+        }
+        moduleType = '';
+    });
+
+    $('.page_left').on('mouseover', '.list-group-item', function() {
+        $('.list-group-item').removeClass('active');
+        $(this).addClass('active')
+    })
+    // 编辑中页面禁止触发事件
+    $('body').on('click', '.page_edit', function(e) {
+        e.preventDefault();
+        return false
+    })
+    $('.active_btn button').on('click', function() {
+        $('.active_btn button').removeClass('btn-success');
+        $(this).addClass('btn-success');
+        var page_pre = $('.page_pre');
+        var page_edit = $('.page_edit');
+        var prev = page_pre.attr('preview');
+        if ($(this).hasClass('view_btn')) {
+            if (prev == 'view') {
+                page_pre.html(page_edit.html());
+            } else if (prev == 'code') {
+                page_pre.html(page_edit.text());
+                page_edit.html(page_edit.text());
+            }
+            page_pre.attr('preview', 'view');
+            page_pre.addClass('dn');
+        } else if ($(this).hasClass('code_btn')) {
+            if (prev == 'view') {
+                page_pre.html(page_edit.html());
+                page_edit.text(page_edit.html());
+            } else if (prev == 'code') {
+                page_pre.html(page_edit.text());
+            }
+            page_pre.attr('preview', 'code');
+            page_pre.removeClass('dn');
+        } else if ($(this).hasClass('pre_btn')) {
+            if (prev == 'view') {
+                page_pre.html(page_edit.html());
+            } else if (prev == 'code') {
+                page_pre.html(page_edit.text());
+            }
+            page_pre.removeClass('dn');
+
+        }
+    })
+})
+</script>
+</body>
+</html>
