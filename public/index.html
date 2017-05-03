@@ -6,16 +6,20 @@
 <title>活动管理平台</title>
 <meta name="description" content="">
 <meta name="keywords" content="">
-<link rel="stylesheet" href="//cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
+<link rel="stylesheet" href="http://cdn.bootcss.com/bootstrap/3.3.5/css/bootstrap.min.css">
 <link rel="stylesheet" href="" />
-<script src="//cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
-<script src="//cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
+<script src="http://cdn.bootcss.com/jquery/1.11.3/jquery.min.js"></script>
+<script src="http://cdn.bootcss.com/bootstrap/3.3.5/js/bootstrap.min.js"></script>
 <!-- <script type="text/javascript" src="http://static.qiyi.com/js/html5/js/lib/lib.1.0.1.min.js?sea1.2.min.js"></script> -->
+<link rel="stylesheet" type="text/css" href="http://static.iqiyi.com/css/20151208/h5-activities-1208.css">
 <style type="text/css">
 @media (min-width: 1400px) {
     .container {
         width: 100%;
     }
+}
+body {
+    background-color: #fff;
 }
 .dn {
     display: none;
@@ -46,13 +50,20 @@
     height: 1000px;
     float: left;
     border-radius: 5px;
+    position: relative;
+}
+.btn-success {
+    background-color: #449d44 !important;
+    border-color: #398439 !important;
 }
 .page_pre {
     width: 39%;
     border: 1px solid #ddd;
     float: right;
-    height: 1000px;
+    height: auto;
     border-radius: 5px;
+    min-height: 200px;
+    position: relative;
 }
 .active_btn {
     width: 100%;
@@ -61,6 +72,60 @@
 .list-group-item {
     cursor: pointer;
 }
+.active_left {
+    width: 60%;
+    float: left;
+    height: 30px;
+}
+.active_right {
+    width: 39%;
+    float: right;
+    height: 30px;
+}
+.list_box {
+    height: 100px;
+    width: 100%;
+    display: none;
+    border: 1px solid #ddd;
+    text-align: center;
+}
+li {
+    margin: 0px;
+    padding: 0px;
+    list-style-type: none; 
+}
+.list_box .list_wrap {
+    display: inline-block;
+    width: 48%;
+    height: 50px;
+    border: 1px solid #000;
+    overflow: hidden;
+}
+ul {
+    margin: 0px;
+    padding: 0px;
+}
+::-webkit-scrollbar {
+    width:1px;
+    height:14px
+}
+::-webkit-scrollbar-thumb {
+    border-radius:999px;
+    border:5px solid transparent
+}
+::-webkit-scrollbar-thumb {
+    min-height:20px;
+    background-clip:content-box;
+    box-shadow:0 0 0 5px #fff inset
+}
+::-webkit-scrollbar-corner {
+    background:transparent
+}
+/*.list-group {
+    border-left: 1px solid #ddd;
+    border-right: 1px solid #ddd;
+    border-radius: 5px;
+}*/
 </style>
 </head>
 <body>
@@ -80,11 +145,40 @@
     <div class="container">
         <div class="page_left">
             <ul class="list-group">
-                <li class="list-group-item active" module-id="nav" draggable="true">导航</li>
-                <li class="list-group-item" module-id="button" draggable="true">标题</li>
-                <li class="list-group-item" module-id="tab" draggable="true">Morbi leo risus</li>
-                <li class="list-group-item">Porta ac consectetur ac</li>
-                <li class="list-group-item">Vestibulum at eros</li>
+                <li>
+                    <div class="list-group-item active">布局</div>
+                    <ul class="list_box">
+                        <li class="list_wrap" module-id="nav" draggable="true">
+                            背景
+                        </li>
+                        <li class="list_wrap" module-id="tab" draggable="true">
+                            弹窗
+                        </li>
+                    </ul>
+                </li>
+                <li>
+                    <div class="list-group-item">组件</div>
+                    <ul class="list_box">
+                        <li class="list_wrap" module-id="turntable" draggable="true">
+                            转盘
+                        </li>
+                        <li class="list_wrap" module-id="explanation" draggable="true">
+                            说明
+                        </li>
+                        <li class="list_wrap" module-id="postCard" draggable="true">
+                            明信片
+                        </li>
+                        <li class="list_wrap" module-id="draws" draggable="true">
+                            中奖用户
+                        </li>
+                        <li class="list_wrap" module-id="rule" draggable="true">
+                            活动规则
+                        </li>
+                        <li class="list_wrap" module-id="relief" draggable="true">
+                            免责声明
+                        </li>
+                    </ul>
+                </li>
             </ul>
         </div>
         <div class="page_right">
@@ -106,13 +200,24 @@
  **********************/
 $(document).ready(function() {
     var module = {
-            nav: '<nav class="navbar navbar-inverse module" module-top="true"><div class="container-fluid"><div class="navbar-header"><a class="navbar-brand" href="">MPAMS</a></div><div class="collapse navbar-collapse" id="bs-example-navbar-collapse-9" module-box="true"></div></div></nav>',
-            button: '<ul class="nav navbar-nav module"><li class="active"><a href="">活动管理平台</a></li></ul>',
-            tab: '<div class="btn-group module" module-top="true"><button type="button" class="btn btn-default">Left</button><button type="button" class="btn btn-default">Middle</button><button type="button" class="btn btn-default">Right</button></div>'
+            nav: '<div class="wrapper-bg module" module-top="true"><div class="wrapper" module-box="true"></div></div>',
+            turntable: '<div class="act-top act-top-index module"><section class="turntable-bg" glue-component="component.draw.Turntable" glue-id="component.draw.Turntable_3"><div class="pointer"><img src="http://www.qiyipic.com/common/fix/h5-act-1208/pointer.png" alt="pointer" width="100%"></div><div class="rotate" glue-node="target"><img id="rotate" src="http://www.qiyipic.com/common/fix/h5-act-1208/turntable.png" alt="turntable" width="100%" style="transform: rotate(0deg);-webkit-transform: rotate(0deg);"></div></section><section class="act-form"><div class="act-form-tip dn" glue-component="component.hint.HintMessage" glue-id="component.hint.HintMessage_4">您今天获取验证码次数过多，请明天再来吧！</div><div glue-component="component.draw.CaptchaDraw" glue-behavior="component.draw.behavior.phoneInputRule, component.draw.behavior.captchaInputRule" glue-id="component.draw.CaptchaDraw_5"><div class="act_code"><input type="tel" placeholder="输入手机号获取验证码" class="act_input" glue-node="phoneNumber" storageflag="0" phonenumber=""><input type="button" value="获取验证码" class="getNum" glue-node="getCaptcha" t="20" rseat="512101_2"><span class="getTime dn">剩余<em glue-node="countDown">59</em>秒</span></div><div class="act_luck-draw"><input type="number" placeholder="输入验证码点击抽奖" class="act_input" glue-node="captcha"><input type="button" value="抽奖" class="luckDraw" glue-node="drawLottery" t="20" rseat="512101_3"></div></div></section></div>',
+            tab: '<div class="module" module-top="true"><div class="cover dn"></div><div class="tips-loading dn" glue-component="component.dialog.LoadingDialog"><div class="loading_img"></div></div><div class="act-pop dn" glue-component="component.dialog.PopupDialog" glue-data-type="material"><div class="title">恭喜您获得悦享心意大奖</div><div class="prize-name"><h4 glue-node="title"></h4><p glue-node="subTitle"></p></div><div class="prize-info"><span>领奖说明：</span><em glue-node="descp"></em></div><div class="act-users-from"><ul><li><label>姓名</label><input type="text" name="" class="input-text" glue-node="userName"></li><li><label>手机号</label><input type="text" name="" class="input-text" glue-node="userPhone"></li><li><label>收货地址</label><textarea class="input-textarea" glue-node="userAddress"></textarea></li></ul></div><div class="share-tip"><i class="pyq-icon"></i>分享到朋友圈再赠送您一次抽奖机会</div><a href="javascript:void(0);" class="btn-getShare" glue-node="button" t="20" rseat="512101_5">领取并分享</a><div class="users-tip dn" glue-node="tip">为了保证您收到宝贝，请填写完整信息！</div></div><div class="act-pop dn" glue-component="component.dialog.PopupDialog" glue-data-type="coupon"><div class="title">恭喜您获得悦享心意大奖</div><div class="iqy-ticket iqy-hycard"><div class="price" glue-node="title">满<span>58</span>元减<span>15</span>元 </div><div class="time" glue-node="descp">有效期至：2015-12-31 23:59</div><div class="code">优惠码：<span glue-node="code">A8R4Y3R6Z7</span></div></div><div class="usage-notes mb10"><ul><li>长按优惠码，点击复制，用手机登录http://m.iqiyi.com/。点击我的，并登录，点击开通VIP。选择58元季卡，输入优惠码即可。</li></ul></div><div class="share-tip"><i class="pyq-icon"></i>快分享给其他小伙伴，赶快来参与！</div><a href="javascript:void(0);" class="btn-getShare" glue-node="button" t="20" rseat="512101_5">分享</a><div class="act-tip">关注爱奇艺APP微信号，免费送1000张会员卡</div></div><div class="act-pop dn" glue-component="component.dialog.PopupDialog" glue-data-type="movie_card"><div class="title">恭喜您获得悦享心意大奖</div><div class="iqy-ticket"><div class="price" glue-node="title">满<span>40</span>元减<span>10</span>元 </div><div class="time" glue-node="descp">有效期至：2015-01-03 23:59</div><div class="code">优惠码：<span glue-node="code"></span></div></div><div class="usage-notes mb10"><ul><li>长按优惠码，点击复制，在发现- 电影票-我的-我的优惠券中粘贴即可；购买订单时，在收银台界面选择 使用该代金券；每笔订单限用一张代金券</li></ul></div><div class="share-tip"><i class="pyq-icon"></i>分享到朋友圈再赠送您一次抽奖机会</div><a href="javascript:void(0);" class="btn-getShare" glue-node="button" t="20" rseat="512101_5">分享</a><div class="act-tip">关注爱奇艺APP微信号，免费送1000张会员卡</div></div><div class="act-already-join dn"></div></div>',
+            explanation: '<section class="act-item module"><div class="act-title" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/title-prize.png);">奖品说明</div><ul class="prize-img-list"><li><a href="javascript:void(0);"><div class="img" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/prize-1.png);"></div><h4>联想乐檬赞助</h4></a></li><li><a href="javascript:void(0);"><div class="img" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/prize-2.png);"></div><h4>奔驰smart赞助</h4></a></li><li><a href="javascript:void(0);"><div class="img" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/prize-3.png);"></div><h4>海尔商城赞助</h4></a></li></ul><div class="prize-type"><h3>奖品种类</h3><ul class="act-info-list"><li><i class="list_num">1</i><p>iPhone6s 4台</p></li><li><i class="list_num">2</i><p>ipad air 4台</p></li><li><i class="list_num">3</i><p>爱奇艺电视6台</p></li><li><i class="list_num">4</i><p>海尔mini洗衣机30台</p></li><li><i class="list_num">5</i><p>海尔冰箱卫士30台</p></li><li><i class="list_num">6</i><p>200元购物卡50张</p></li><li><i class="list_num">7</i><p>爱奇艺电影票10元优惠劵500万张</p></li><li><i class="list_num">8</i><p>爱奇艺会员卡15元优惠劵500万张，会员卡1000张</p></li></ul></div></section>',
+            postCard: '<div class="postcard module"><a href="http://h5factory.epub360.com/v2/manage/book/lgpmac/" class="link-postcard" t="20" rseat="512101_4">专属定制明信片</a></div>',
+            draws: '<section class="act-item module"><div class="act-title" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/title-users.png);">中奖用户</div><div class="div act-users-wrap"><div class="act-users" glue-component="component.draw.AwardList" glue-id="component.draw.AwardList_4" style="overflow-y: hidden; height: 156px;"><ul class="act-users-list" glue-node="list1" style="position: absolute;"><li>185****1732 中了一个<span class="prize-name">iPad</span></li><li>185****3217 中了一辆<span class="prize-name">汽车</span></li><li>185****1732 中了一个<span class="prize-name">iPhone6s</span></li><li>185****3217 中了一份<span class="prize-name">优惠券</span></li><li>185****3217 中了一辆<span class="prize-name">汽车</span></li><li>185****1732 中了一个<span class="prize-name">iPhone6s</span></li><li>185****3217 中了一份<span class="prize-name">优惠券</span></li><li>185****1732 中了一个<span class="prize-name">iPad</span></li><li>185****1732 中了一个<span class="prize-name">iPad</span></li><li>185****3217 中了一辆<span class="prize-name">汽车</span></li><li>185****1732 中了一个<span class="prize-name">iPhone6s</span></li><li>185****3217 中了一份<span class="prize-name">优惠券</span></li><li>185****3217 中了一辆<span class="prize-name">汽车</span></li><li>185****1732 中了一个<span class="prize-name">iPhone6s</span></li><li>185****3217 中了一份<span class="prize-name">优惠券</span></li><li>185****1732 中了一个<span class="prize-name">iPad</span></li></ul><ul class="act-users-list" glue-node="list2" style="position: absolute;"></ul></div></div></section>',
+            rule: '<section class="act-item module"><div class="act-title" style="background-image:url(http://www.qiyipic.com/common/fix/h5-act-1208/title-rule.png);">活动规则</div><ul class="act-info-list"><li><i class="list_num">1</i><p>每台手机，每个手机号只能参与一次，100%中奖；</p></li><li><i class="list_num">2</i><p>中奖用户需填写真实信息及地址；</p></li><li><i class="list_num">3</i><p>信息核实后会在15个工作日之内为您寄出奖品；</p></li><li><i class="list_num">4</i><p>如有问题可关注“爱奇艺APP”微信公共号进行反馈；</p></li><li><i class="list_num">5</i><p>奖品以收到的实物奖品为准；</p></li><li><i class="list_num">6</i><p>此次活动最终解释权归爱奇艺所有。</p></li></ul></section>',
+            relief: '<div class="announce module">免责声明：活动由爱奇艺提供，与设备生产商Apple Inc.公司无关</div>',
         },
         moduleType = '';
+    var list = $('.page_left .list-group-item');
+    list.on('click', function() {
+        list.removeClass('active');
+        $(this).addClass('active');
+        $(this).parents('li').find('.list_box').slideToggle("slow");
+    })
     // 拖拽开始
-    $(".list-group-item").on('dragstart', function(e) {
+    $(".list_wrap").on('dragstart', function(e) {
         moduleType = $(this).attr('module-id');
         console.log(moduleType)
     });
@@ -137,10 +242,6 @@ $(document).ready(function() {
         moduleType = '';
     });
 
-    $('.page_left').on('mouseover', '.list-group-item', function() {
-        $('.list-group-item').removeClass('active');
-        $(this).addClass('active')
-    })
     // 编辑中页面禁止触发事件
     $('body').on('click', '.page_edit', function(e) {
         e.preventDefault();
